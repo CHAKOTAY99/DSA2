@@ -29,11 +29,11 @@ namespace DSA2ChakotayIncorvaia
 
                 if (i == startState)
                 {
-                    states.Add(new NodeState() { IdNum = i, StateType = y, startState = 1 });
+                    states.Add(new NodeState() { IdNum = i, StateType = y, StartState = 1 });
                 }
                 else
                 {
-                    states.Add(new NodeState() { IdNum = i, StateType = y, startState = 0 });
+                    states.Add(new NodeState() { IdNum = i, StateType = y, StartState = 0 });
                 }
             }
             /* Fill out the transitions by ensuring later
@@ -54,6 +54,47 @@ namespace DSA2ChakotayIncorvaia
             foreach (NodeState aState in states)
             {
                 Console.WriteLine(aState);
+            }
+        }
+
+        /* Method to enter strings into the automata
+         * and see if its rejected or accepted */
+         public void EnterString()
+        {
+            Console.WriteLine("-----------------------------------------------------");
+            Console.WriteLine("Enter a string (Alphabet = a,b): ");
+            String words = Console.ReadLine();
+            NodeState tempState = states.Find(e => e.StartState == 1);
+            Console.WriteLine(tempState);
+            foreach (char c in words)
+            {
+                if(c == ' ') {
+                    tempState = tempState;
+                } else if (c == 'a')
+                {
+                    tempState = tempState.a;
+                    Console.WriteLine(tempState);
+                } else if (c == 'b')
+                {
+                    tempState = tempState.b;
+                    Console.WriteLine(tempState);
+                } else
+                {
+                    //return "Invalid String!";
+                    Console.WriteLine("Invalid String!");
+                    return;
+                }
+            }
+            if(tempState.StateType == 0)
+            {
+                /* Accepted */
+                //return "String has been accepted";
+                Console.WriteLine("ACCEPTED STRING");
+            } else
+            {
+                /* Rejected */
+                //return "String has been rejected";
+                Console.WriteLine("REJECTED STRING");
             }
         }
     }

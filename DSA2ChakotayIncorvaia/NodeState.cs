@@ -8,14 +8,14 @@ namespace DSA2ChakotayIncorvaia
     {
         public int IdNum { get; set; }
         public int StateType { get; set; } /* 0 = accepting 1 = rejecting */
-        public int startState { get; set; } /* 0 = not start 1 = start */
+        public int StartState { get; set; } /* 0 = not start 1 = start */
         public NodeState a, b = null; /* Transitions */
 
         public override string ToString()
         {
             /* Marker if it is a start state or not */
             String startOrNot = "";
-            if(startState == 1)
+            if(StartState == 1)
             {
                 startOrNot = " And it is also the Start State";
             }
