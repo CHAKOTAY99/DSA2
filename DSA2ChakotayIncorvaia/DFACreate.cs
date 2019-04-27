@@ -100,9 +100,10 @@ namespace DSA2ChakotayIncorvaia
 
         /* Find the depth of the automata
          * Use breadth-first search to find the last and shortes possible state
-         * then calculate on how to get to it */
-        public void bSearch()
+         * then calculate on how to get to it by calling a method which will be passed the last node */
+        public void Bsearch()
         {
+            int depth = 0;
             /* Find start state */
             NodeState currentNode = states.Find(e => e.StartState == 1);
             NodeState lastState = null;
@@ -114,19 +115,33 @@ namespace DSA2ChakotayIncorvaia
             Console.WriteLine("\nCalculating Depth: ");
             /* Start */
             bState.Enqueue(currentNode);
+            bState.Enqueue(null);
             visitedState.Enqueue(currentNode);
             while(bState.Count != 0)
             {
                 currentNode = bState.Dequeue();
-                if (!visitedState.Contains(currentNode.a))
+                if(currentNode == null)
                 {
-                    bState.Enqueue(currentNode.a);
-                    visitedState.Enqueue(currentNode.a);
+                    depth++;
+                    bState.Enqueue(null);
+                    if(bState.Peek() == null)
+                    {
+                        depth--;
+                        break;
+                    }
                 }
-                if (!visitedState.Contains(currentNode.b))
+                if (currentNode != null)
                 {
-                    bState.Enqueue(currentNode.b);
-                    visitedState.Enqueue(currentNode.b);
+                    if (!visitedState.Contains(currentNode.a))
+                    {
+                        bState.Enqueue(currentNode.a);
+                        visitedState.Enqueue(currentNode.a);
+                    }
+                    if (!visitedState.Contains(currentNode.b))
+                    {
+                        bState.Enqueue(currentNode.b);
+                        visitedState.Enqueue(currentNode.b);
+                    }
                 }
             }
             foreach(NodeState aState in visitedState)
@@ -134,13 +149,28 @@ namespace DSA2ChakotayIncorvaia
                 Console.Write("{0} ",aState.IdNum);
                 lastState = aState;
             }
+            Console.WriteLine("\nThe Depth of the Automaton is " + depth + ".");
+        }
 
-            /* We just got the last node, lets find a way to get to it */
-            currentNode = states.Find(e => e.StartState == 1);
-            while(currentNode != lastState) { 
-
+        /* Method to calculate the actual depth of the automata */
+        public int CalcDepth(NodeState currentNode, NodeState finState, int counter)
+        {
+            if(currentNode == null) {
+                return 0;
             }
-            Console.WriteLine("\nThe depth is {0}.", visitedState.Count);
+            if (currentNode == finState)
+            {
+                return counter;
+            }
+            Console.WriteLine("Checking A");
+            int result = CalcDepth(currentNode.a, finState, counter++);
+            if(result != 0)
+            {
+                return result;
+            }
+            Console.WriteLine("Checking B");
+            result = CalcDepth(currentNode.b, finState, counter++);
+            return result;
         }
     }
 }
