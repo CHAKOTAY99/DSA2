@@ -9,7 +9,8 @@ namespace DSA2ChakotayIncorvaia
             DFACreate q1 = new DFACreate();
             q1.CreateAutomata();
             q1.DisplayAutomata();
-            q1.EnterString();
+            //q1.EnterString();
+            q1.bSearch();
             Console.ReadLine();
         }
     }
