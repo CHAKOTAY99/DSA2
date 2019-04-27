@@ -57,6 +57,51 @@ namespace DSA2ChakotayIncorvaia
             }
         }
 
+        // Method to display DFA with an adjacency matrix
+        public void DisplayMatrix()
+        {
+            int[] Verticies = new int[states.Count];
+            int[,] Edges = new int[states.Count, states.Count * 2];
+            int Vcount = 0, Ecount1 = 0, Ecount2 = 0;
+
+            foreach(NodeState aState in states)
+            {
+                Verticies[Vcount] = aState.IdNum;
+                Vcount++;
+
+                Edges[Ecount1, Ecount2] = aState.a.IdNum;
+                Console.WriteLine(Edges[Ecount1, Ecount2]);
+                Ecount2++;
+                Edges[Ecount1, Ecount2] = aState.b.IdNum;
+                Console.WriteLine(Edges[Ecount1, Ecount2]);
+                Ecount1++;
+                Ecount2++;
+            }
+            Console.Write("V = {");
+            for (int i = 0; i < Vcount; i++)
+            {
+                if (i == Vcount-1)
+                {
+                    Console.Write("{0}", Verticies[i]);
+                } else
+                {
+                    Console.Write("{0},", Verticies[i]);
+                }
+            }
+            Console.Write("}");
+
+            /*Console.Write("\nE = {");
+            for (int i = 0; i < Ecount1; i++)
+            {
+                for (int x = 0; x < Ecount2; x++)
+                {
+                    Console.Write(Edges[i, x]);
+                }
+            }
+            Console.Write("}");
+            */
+        }
+
         /* Method to enter strings into the automata
          * and see if its rejected or accepted */
          public void EnterString()
