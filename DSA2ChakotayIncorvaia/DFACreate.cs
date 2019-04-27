@@ -151,26 +151,5 @@ namespace DSA2ChakotayIncorvaia
             }
             Console.WriteLine("\nThe Depth of the Automaton is " + depth + ".");
         }
-
-        /* Method to calculate the actual depth of the automata */
-        public int CalcDepth(NodeState currentNode, NodeState finState, int counter)
-        {
-            if(currentNode == null) {
-                return 0;
-            }
-            if (currentNode == finState)
-            {
-                return counter;
-            }
-            Console.WriteLine("Checking A");
-            int result = CalcDepth(currentNode.a, finState, counter++);
-            if(result != 0)
-            {
-                return result;
-            }
-            Console.WriteLine("Checking B");
-            result = CalcDepth(currentNode.b, finState, counter++);
-            return result;
-        }
     }
 }
