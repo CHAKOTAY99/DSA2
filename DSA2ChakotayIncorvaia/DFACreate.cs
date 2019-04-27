@@ -100,7 +100,7 @@ namespace DSA2ChakotayIncorvaia
 
         /* Find the depth of the automata
          * Use breadth-first search to find the last and shortes possible state
-         * then calculate on how to get to it by calling a method which will be passed the last node */
+         * then calculate on how to get to it by using nulls to calculate the level */
         public void Bsearch()
         {
             int depth = 0;
