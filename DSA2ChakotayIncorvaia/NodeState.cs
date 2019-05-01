@@ -24,13 +24,13 @@ namespace DSA2ChakotayIncorvaia
             /* Return statements */
             if (StateType == 0)
             {
-                return "State ID: " + IdNum + " is an accepting state with transition A: (" + IdNum + "," + a.IdNum + ") and transition " +
+                return "State ID: {" + IdNum + "} is an accepting state with transition A: ({" + IdNum + "}," + a.IdNum + ") and transition " +
                     "B: (" + IdNum + "," + b.IdNum + ")." +startOrNot;
 
             }
             else
             {
-                return "State ID: " + IdNum + " is a rejecting state with transition A: (" + IdNum + "," + a.IdNum + ") and transition " +
+                return "State ID: {" + IdNum + "} is a rejecting state with transition A: ({" + IdNum + "}," + a.IdNum + ") and transition " +
                     "B: (" + IdNum + "," + b.IdNum + ")." + startOrNot;
             }
         }

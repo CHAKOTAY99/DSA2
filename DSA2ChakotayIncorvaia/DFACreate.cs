@@ -81,19 +81,19 @@ namespace DSA2ChakotayIncorvaia
 
                 if (aState == item)
                 {
-                    Console.Write("(" + aState.IdNum + ",a)=" + aState.a.IdNum);
-                    Console.Write("(" + aState.IdNum + ",b)=" + aState.b.IdNum);
+                    Console.Write("({" + aState.IdNum + "},a)=" + aState.a.IdNum);
+                    Console.Write("({" + aState.IdNum + "},b)=" + aState.b.IdNum);
                 }
                 else
                 {
-                    Console.Write("(" + aState.IdNum + ",a)=" + aState.a.IdNum + ",");
-                    Console.Write("(" + aState.IdNum + ",b)=" + aState.b.IdNum + ",");
+                    Console.Write("({" + aState.IdNum + "},a)=" + aState.a.IdNum + ",");
+                    Console.Write("({" + aState.IdNum + "},b)=" + aState.b.IdNum + ",");
                 }
             }
             Console.Write("}\n");
             foreach (NodeState aState in states)
             {
-                Console.WriteLine(aState.IdNum + "-->" + aState.a.IdNum + "-->" + aState.b.IdNum + "--> null");
+                Console.WriteLine("{"+aState.IdNum + "} -->" + " ({" + aState.IdNum + "},a)="+ aState.a.IdNum + " --> " + " ({" + aState.IdNum + "},b)="+aState.b.IdNum + " --> null");
             }
             Console.Write("\n");
         }
@@ -191,6 +191,10 @@ namespace DSA2ChakotayIncorvaia
                 lastState = aState;
             }
             Console.WriteLine("\nThe Depth of the Automaton is " + depth + ".");
+        }
+        public void MinimizeMoore()
+        {
+            
         }
     }
 }
