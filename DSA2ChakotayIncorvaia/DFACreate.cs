@@ -57,49 +57,45 @@ namespace DSA2ChakotayIncorvaia
             }
         }
 
-        // Method to display DFA with an adjacency matrix
-        public void DisplayMatrix()
+        // Method to display DFA with an adjacency list
+        public void DisplayList()
         {
-            int[] Verticies = new int[states.Count];
-            int[,] Edges = new int[states.Count, states.Count * 2];
-            int Vcount = 0, Ecount1 = 0, Ecount2 = 0;
-
-            foreach(NodeState aState in states)
-            {
-                Verticies[Vcount] = aState.IdNum;
-                Vcount++;
-
-                Edges[Ecount1, Ecount2] = aState.a.IdNum;
-                Console.WriteLine(Edges[Ecount1, Ecount2]);
-                Ecount2++;
-                Edges[Ecount1, Ecount2] = aState.b.IdNum;
-                Console.WriteLine(Edges[Ecount1, Ecount2]);
-                Ecount1++;
-                Ecount2++;
-            }
+            Console.WriteLine("\nPrinting the Adjancency List");
+            var item = states[states.Count - 1];
             Console.Write("V = {");
-            for (int i = 0; i < Vcount; i++)
+            foreach (NodeState aState in states)
             {
-                if (i == Vcount-1)
+
+                if (aState == item)
                 {
-                    Console.Write("{0}", Verticies[i]);
+                    Console.Write(aState.IdNum);
                 } else
                 {
-                    Console.Write("{0},", Verticies[i]);
+                    Console.Write(aState.IdNum + ",");
                 }
             }
-            Console.Write("}");
-
-            /*Console.Write("\nE = {");
-            for (int i = 0; i < Ecount1; i++)
+            Console.Write("}\n");
+            Console.Write("E = {");
+            foreach (NodeState aState in states)
             {
-                for (int x = 0; x < Ecount2; x++)
+
+                if (aState == item)
                 {
-                    Console.Write(Edges[i, x]);
+                    Console.Write("(" + aState.IdNum + ",a)=" + aState.a.IdNum);
+                    Console.Write("(" + aState.IdNum + ",b)=" + aState.b.IdNum);
+                }
+                else
+                {
+                    Console.Write("(" + aState.IdNum + ",a)=" + aState.a.IdNum + ",");
+                    Console.Write("(" + aState.IdNum + ",b)=" + aState.b.IdNum + ",");
                 }
             }
-            Console.Write("}");
-            */
+            Console.Write("}\n");
+            foreach (NodeState aState in states)
+            {
+                Console.WriteLine(aState.IdNum + "-->" + aState.a.IdNum + "-->" + aState.b.IdNum + "--> null");
+            }
+            Console.Write("\n");
         }
 
         /* Method to enter strings into the automata
