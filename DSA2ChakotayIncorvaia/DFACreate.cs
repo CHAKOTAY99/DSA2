@@ -195,7 +195,11 @@ namespace DSA2ChakotayIncorvaia
         public void MinimizeMoore(List<List<NodeState>> MainList, bool Zeropass)
         {
             List<List<NodeState>> NewList = new List<List<NodeState>>();
-            if(Zeropass == false)
+            if(NewList == MainList)
+            {
+                Console.WriteLine("THEY MATCH -- WE HAVE THE MINIMIZED VERSION");
+                return;
+            } else if(Zeropass == false)
             {
                 foreach (NodeState aState in states)
                 {
@@ -231,7 +235,7 @@ namespace DSA2ChakotayIncorvaia
             {
                 foreach(List<NodeState> sublist in MainList)
                 {
-
+                     
                 }
                 //fuckyoutoo
             }
