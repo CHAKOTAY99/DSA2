@@ -10,6 +10,7 @@ namespace DSA2ChakotayIncorvaia
         public int StateType { get; set; } /* 0 = accepting 1 = rejecting */
         public int StartState { get; set; } /* 0 = not start 1 = start */
         public NodeState a, b = null; /* Transitions */
+        public int GroupId { get; set; }
 
         public override string ToString()
         {
@@ -25,13 +26,13 @@ namespace DSA2ChakotayIncorvaia
             if (StateType == 0)
             {
                 return "State ID: {" + IdNum + "} is an accepting state with transition A: ({" + IdNum + "}," + a.IdNum + ") and transition " +
-                    "B: (" + IdNum + "," + b.IdNum + ")." +startOrNot;
+                    "B: ({" + IdNum + "}," + b.IdNum + ")." +startOrNot;
 
             }
             else
             {
                 return "State ID: {" + IdNum + "} is a rejecting state with transition A: ({" + IdNum + "}," + a.IdNum + ") and transition " +
-                    "B: (" + IdNum + "," + b.IdNum + ")." + startOrNot;
+                    "B: ({" + IdNum + "}," + b.IdNum + ")." + startOrNot;
             }
         }
 

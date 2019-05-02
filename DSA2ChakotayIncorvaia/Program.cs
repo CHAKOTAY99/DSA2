@@ -12,6 +12,7 @@ namespace DSA2ChakotayIncorvaia
             //q1.EnterString();
             q1.Bsearch();
             q1.DisplayList();
+            q1.MinimizeMoore();
             Console.ReadLine();
         }
     }

@@ -192,9 +192,50 @@ namespace DSA2ChakotayIncorvaia
             }
             Console.WriteLine("\nThe Depth of the Automaton is " + depth + ".");
         }
-        public void MinimizeMoore()
+        public void MinimizeMoore(List<List<NodeState>> MainList, bool Zeropass)
         {
-            
+            List<List<NodeState>> NewList = new List<List<NodeState>>();
+            if(Zeropass == false)
+            {
+                foreach (NodeState aState in states)
+                {
+                    if(aState.StateType == 0)
+                    {
+                        foreach(List<NodeState> SubList in NewList)
+                        {
+                            if(SubList.Contains(new NodeState { StateType = 0 }))
+                            {
+                                SubList.Add(aState);
+                            } else
+                            {
+                                NewList.Add(new List<NodeState>(new NodeState[] { aState }));
+                            }
+                        }
+                    } else
+                    {
+                        foreach (List<NodeState> SubList in NewList)
+                        {
+                            if (SubList.Contains(new NodeState { StateType = 1 }))
+                            {
+                                SubList.Add(aState);
+                            }
+                            else
+                            {
+                                NewList.Add(new List<NodeState>(new NodeState[] { aState }));
+                            }
+                        }
+                    }
+                }
+                MinimizeMoore(NewList, true);
+            } else
+            {
+                foreach(List<NodeState> sublist in MainList)
+                {
+
+                }
+                //fuckyoutoo
+            }
+            //states.Add(new NodeState() { IdNum = i, StateType = y, StartState = 0 });
         }
     }
 }
