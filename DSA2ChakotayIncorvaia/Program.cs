@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DSA2ChakotayIncorvaia
 {
@@ -12,7 +13,8 @@ namespace DSA2ChakotayIncorvaia
             //q1.EnterString();
             q1.Bsearch();
             q1.DisplayList();
-            q1.MinimizeMoore();
+            List<List<NodeState>> NewList = new List<List<NodeState>>();
+            q1.MinimizeMoore(NewList, false);
             Console.ReadLine();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DSA2ChakotayIncorvaia
@@ -195,23 +196,61 @@ namespace DSA2ChakotayIncorvaia
         public void MinimizeMoore(List<List<NodeState>> MainList, bool Zeropass)
         {
             List<List<NodeState>> NewList = new List<List<NodeState>>();
-            if(NewList == MainList)
+            if(Zeropass == false) // Else check if it seperated its accepting and rejecting states
             {
-                Console.WriteLine("THEY MATCH -- WE HAVE THE MINIMIZED VERSION");
-                return;
-            } else if(Zeropass == false)
-            {
-                foreach (NodeState aState in states)
+                Console.WriteLine("Make the 0 lvl lists");
+                List<NodeState> accepting = new List<NodeState>();
+                List<NodeState> rejecting = new List<NodeState>();
+                foreach(NodeState aState in states)
                 {
                     if(aState.StateType == 0)
                     {
+                        accepting.Add(aState);
+                    } else
+                    {
+                        rejecting.Add(aState);
+                    }
+                }
+                NewList.Add(new List<NodeState>(accepting));
+                NewList.Add(new List<NodeState>(rejecting));
+                /*// If not than seperate them into seperate lists
+                foreach (NodeState aState in states)
+                {
+                    foreach(List<NodeState> SubList in NewList)
+                    {
+                        if (!SubList.Any())
+                        {
+                            SubList.Add(aState);
+                        }
+                    }
+                    // Checks if the big list has a tiny list
+                    if (!NewList.Any())
+                    {
+                        // Create one and put the aState in it
+                        NewList.Add(new List<NodeState>(new NodeState[] { aState }));
+                    } else
+                    {
+                        foreach (List<NodeState> SubList in NewList)
+                        {
+
+                        }
+                    }
+                    // If it is of an accepting state
+                    if (aState.StateType == 0)
+                    {
+                        NewList.Add(new List<NodeState>(new NodeState[] { aState }));
+                        Console.WriteLine("Moo");
+                        // Each tiny list in the big list
                         foreach(List<NodeState> SubList in NewList)
                         {
+                            // Check if the tiny list contains data which are accepting states and put them in
                             if(SubList.Contains(new NodeState { StateType = 0 }))
                             {
+                                Console.WriteLine("Mohammed");
                                 SubList.Add(aState);
                             } else
                             {
+                                Console.WriteLine("Ahmed");
                                 NewList.Add(new List<NodeState>(new NodeState[] { aState }));
                             }
                         }
@@ -230,16 +269,81 @@ namespace DSA2ChakotayIncorvaia
                         }
                     }
                 }
+                */
+                /* THis is test data */
+                foreach (List<NodeState> SubList in NewList)
+                {
+                    Console.WriteLine("NEW FAT LIST");
+                    foreach(NodeState aState in SubList)
+                    {
+                        Console.WriteLine(aState);
+                    }
+                }
                 MinimizeMoore(NewList, true);
             } else
             {
-                foreach(List<NodeState> sublist in MainList)
+                bool doFirst = false;
+                foreach (List<NodeState> SubList in MainList)
                 {
-                     
+                    var LastItem = SubList[SubList.Count - 1];
+                    if (doFirst == false)
+                    {
+                        var FirstItem = SubList[0];
+                        if(CheckSubset(LastItem.a, FirstItem.a, MainList))
+                        {
+                            if(CheckSubset(LastItem.b, FirstItem.b, MainList))
+                            {
+                                NewList.Add(new List<NodeState>(new NodeState[] { LastItem, FirstItem }));
+                            } else
+                            {
+                                NewList.Add(new List<NodeState>(new NodeState[] { LastItem }));
+                                NewList.Add(new List<NodeState>(new NodeState[] { FirstItem }));
+                            }
+                        } else
+                        {
+                            NewList.Add(new List<NodeState>(new NodeState[] { LastItem }));
+                            NewList.Add(new List<NodeState>(new NodeState[] { FirstItem }));
+                        }
+
+                        // Started off the first sets
+                        doFirst = true;
+                    }
+                    //var LastItem = SubList[SubList.Count - 1];
+                    //var FirstItem = SubList[0];
+                    foreach(NodeState aState in SubList)
+                    {
+                        if(SubList = MainList[MainList.Count - 1])
+                        {
+                            NewList.Add(new List<NodeState>(new NodeState[] { aState }));
+                        }
+                        if(CheckSubset(LastItem.a, aState.a, MainList))
+                        {
+                            if(CheckSubset(LastItem.b, aState.b, MainList))
+                            {
+                                SubList.Add(aState);
+                            } else
+                            {
+                                break;
+                            }
+                            break;
+                        }
+                    }
                 }
-                //fuckyoutoo
             }
             //states.Add(new NodeState() { IdNum = i, StateType = y, StartState = 0 });
+        }
+
+        // Method to check if both nodes are within the same list
+        public bool CheckSubset(NodeState x, NodeState y, List<List<NodeState>> BigList)
+        {
+            foreach(List<NodeState>SubList in BigList)
+            {
+                if(SubList.Contains(x) && SubList.Contains(y))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
