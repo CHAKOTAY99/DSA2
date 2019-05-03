@@ -377,7 +377,8 @@ namespace DSA2ChakotayIncorvaia
         // Old Minimize Moore Algorithm - coudln't get trough actual partitioning without mixing up the lists
         public void MinimizeMoore(List<List<NodeState>> OldEquivalency, bool Zeropass)
         {
-            List<List<NodeState>> NewEquivalency = new List<List<NodeState>>();
+            Console.WriteLine("Method got called");
+            List<List<NodeState>> kEquivalency = new List<List<NodeState>>();
             if(Zeropass == false) // Else check if it seperated its accepting and rejecting states
             {
                 Console.WriteLine("Make the 0 lvl lists");
@@ -393,9 +394,9 @@ namespace DSA2ChakotayIncorvaia
                         rejecting.Add(aState);
                     }
                 }
-                NewEquivalency.Add(new List<NodeState>(accepting));
-                NewEquivalency.Add(new List<NodeState>(rejecting));
-                foreach (List<NodeState> SubList in NewEquivalency)
+                kEquivalency.Add(new List<NodeState>(accepting));
+                kEquivalency.Add(new List<NodeState>(rejecting));
+                foreach (List<NodeState> SubList in kEquivalency)
                 {
                     Console.WriteLine("NEW FAT LIST");
                     foreach(NodeState aState in SubList)
@@ -403,57 +404,226 @@ namespace DSA2ChakotayIncorvaia
                         Console.WriteLine(aState);
                     }
                 }
-                MinimizeMoore(NewEquivalency, true);
+                MinimizeMoore(kEquivalency, true);
             } else
             {
+                // Check each list in the old big list
                 foreach (List<NodeState> OldSubList in OldEquivalency)
                 {
-                    if(OldSubList.Count == 1)
+                    // is the set composed of only 1
+                    if (OldSubList.Count == 1)
                     {
-                        // You can stop right here
-                        break;
+                        // do nothing
                     }
-                    bool doFirst = false;
-                    NodeState LastItem = OldSubList[OldSubList.Count - 1];
-                    NodeState FirstItem = OldSubList[0];
-                    if (doFirst == false)
+                    else
                     {
-                        if(CheckSubset(FirstItem, LastItem, OldEquivalency))
+                        // Compare the contents of the sets to each other
+                        bool doFirst = false;
+                        NodeState LastItem = OldSubList[OldSubList.Count - 1];
+                        NodeState FirstItem = OldSubList[0];
+                        if (doFirst == false)
                         {
-                            NewEquivalency.Add(new List<NodeState>(new NodeState[] { LastItem, FirstItem }));
-                        } else
-                        {
-                            NewEquivalency.Add(new List<NodeState>(new NodeState[] { FirstItem }));
-                            NewEquivalency.Add(new List<NodeState>(new NodeState[] { LastItem }));
-                        }
-                        // Started off the first sets
-                        doFirst = true;
-                    }
-                    foreach(NodeState aState in OldSubList)
-                    {
-                        if(aState == LastItem || aState == FirstItem)
-                        {
-                            // They were added
-                            break;
-                        }
-                        foreach(List<NodeState> NewSubList in NewEquivalency)
-                        {
-                            // Check state type from first object in new list
-                            LastItem = NewSubList[NewSubList.Count - 1];
-                            FirstItem = NewSubList[0];
-                            if(aState.StateType != FirstItem.StateType)
+                            if (CheckSubset(FirstItem, LastItem, OldEquivalency))
                             {
-                                break;
+                                kEquivalency.Add(new List<NodeState>(new NodeState[] { LastItem, FirstItem }));
                             }
-                            if(CheckSubset(aState, LastItem, OldEquivalency)){
-                                NewSubList.Add(aState);
+                            else
+                            {
+                                kEquivalency.Add(new List<NodeState>(new NodeState[] { FirstItem }));
+                                kEquivalency.Add(new List<NodeState>(new NodeState[] { LastItem }));
+                            }
+                            // Started off the first sets
+                            doFirst = true;
+                        }
+                        // Each object in the old set
+                        foreach (NodeState aState in OldSubList)
+                        {
+                            if (aState == LastItem || aState == FirstItem)
+                            {
+                                // do nothing
+                            }
+                            else
+                            {
+                                foreach (List<NodeState> NewSubList in kEquivalency)
+                                {
+                                    // Check state type from first object in new list
+                                    NodeState newLastItem = NewSubList[NewSubList.Count - 1];
+                                    NodeState newFirstItem = NewSubList[0];
+                                    if (aState.StateType != newFirstItem.StateType)
+                                    {
+                                        // do nothing
+                                    }
+                                    else
+                                    {
+                                        if (CheckSubset(aState, newLastItem, OldEquivalency))
+                                        {
+                                            NewSubList.Add(aState);
+                                        }
+                                    }
+                                }
+                                Console.WriteLine("Created a new list");
+                                Console.WriteLine(aState);
+                                kEquivalency.Add(new List<NodeState>(new NodeState[] { aState }));
                             }
                         }
-                        NewEquivalency.Add(new List<NodeState>(new NodeState[] { aState }));
+                    }
+                }
+                if(kEquivalency.Equals(OldEquivalency))
+                {
+                    Console.WriteLine("ITs the end");
+                    foreach (List<NodeState> printList in kEquivalency)
+                    {
+                        Console.WriteLine("FINALLY A LIST");
+                        foreach (NodeState printState in printList)
+                        {
+                            Console.WriteLine(printState);
+                        }
+                    }
+                    Console.WriteLine("Returning now");
+                    return;
+                } else
+                {
+                    Console.WriteLine("Redo it");
+                    MinimizeMoore(kEquivalency, true);
+                }
+            }
+        }
+        /*
+        public void MinimizeMooreHash(HashSet<HashSet<NodeState>> OldEquivalency, bool Zeropass)
+        {
+            Console.WriteLine("Method got called");
+            HashSet<HashSet<NodeState>> kEquivalency = new HashSet<HashSet<NodeState>>();
+            if (Zeropass == false) // Else check if it seperated its accepting and rejecting states
+            {
+                Console.WriteLine("Make the 0 lvl lists");
+                HashSet<NodeState> accepting = new HashSet<NodeState>();
+                HashSet<NodeState> rejecting = new HashSet<NodeState>();
+                foreach (NodeState aState in states)
+                {
+                    if (aState.StateType == 0)
+                    {
+                        accepting.Add(aState);
+                    }
+                    else
+                    {
+                        rejecting.Add(aState);
+                    }
+                }
+                kEquivalency.Add(new HashSet<NodeState>(accepting));
+                kEquivalency.Add(new HashSet<NodeState>(rejecting));
+                foreach (HashSet<NodeState> SubList in kEquivalency)
+                {
+                    Console.WriteLine("NEW FAT LIST");
+                    foreach (NodeState aState in SubList)
+                    {
+                        Console.WriteLine(aState);
+                    }
+                }
+                MinimizeMooreHash(kEquivalency, true);
+            }
+            else
+            {
+                // Check each list in the old big list
+                foreach (HashSet<NodeState> OldSubList in OldEquivalency)
+                {
+                    // is the set composed of only 1
+                    if (OldSubList.Count == 1)
+                    {
+                        // do nothing
+                    }
+                    else
+                    {
+                        // Compare the contents of the sets to each other
+                        bool doFirst = false;
+                        NodeState LastItem = OldSubList[OldSubList.Count - 1];
+                        NodeState FirstItem = OldSubList[0];
+                        if (doFirst == false)
+                        {
+                            if (CheckSubsetHash(FirstItem, LastItem, OldEquivalency))
+                            {
+                                kEquivalency.Add(new HashSet<NodeState>(new NodeState[] { LastItem, FirstItem }));
+                            }
+                            else
+                            {
+                                kEquivalency.Add(new HashSet<NodeState>(new NodeState[] { FirstItem }));
+                                kEquivalency.Add(new HashSet<NodeState>(new NodeState[] { LastItem }));
+                            }
+                            // Started off the first sets
+                            doFirst = true;
+                        }
+                        // Each object in the old set
+                        foreach (NodeState aState in OldSubList)
+                        {
+                            if (aState == LastItem || aState == FirstItem)
+                            {
+                                // do nothing
+                            }
+                            else
+                            {
+                                foreach (HashSet<NodeState> NewSubList in kEquivalency)
+                                {
+                                    // Check state type from first object in new list
+                                    NodeState newLastItem = NewSubList[NewSubList.Count - 1];
+                                    NodeState newFirstItem = NewSubList[0];
+                                    if (aState.StateType != newFirstItem.StateType)
+                                    {
+                                        // do nothing
+                                    }
+                                    else
+                                    {
+                                        if (CheckSubsetHash(aState, newLastItem, OldEquivalency))
+                                        {
+                                            NewSubList.Add(aState);
+                                        }
+                                    }
+                                }
+                                Console.WriteLine("Created a new list");
+                                Console.WriteLine(aState);
+                                kEquivalency.Add(new HashSet<NodeState>(new NodeState[] { aState }));
+                            }
+                        }
+                    }
+                }
+                if (kEquivalency.Equals(OldEquivalency))
+                {
+                    Console.WriteLine("ITs the end");
+                    foreach (HashSet<NodeState> printList in kEquivalency)
+                    {
+                        Console.WriteLine("FINALLY A LIST");
+                        foreach (NodeState printState in printList)
+                        {
+                            Console.WriteLine(printState);
+                        }
+                    }
+                    Console.WriteLine("Returning now");
+                    return;
+                }
+                else
+                {
+                    MinimizeMooreHash(kEquivalency, true);
+                }
+            }
+        }
+        public bool CheckSubsetHash(NodeState x, NodeState y, HashSet<HashSet<NodeState>> OldList)
+        {
+            foreach (HashSet<NodeState> SubList in OldList)
+            {
+                if (SubList.Contains(x.a) && SubList.Contains(y.a))
+                {
+                    if (SubList.Contains(x.b) && SubList.Contains(y.b))
+                    {
+                        return true;
                     }
                 }
             }
-            //states.Add(new NodeState() { IdNum = i, StateType = y, StartState = 0 });
+            return false;
+        }
+        */
+        // Method to check if both subsets are the same
+        public bool CheckCounterSubest(List<List<NodeState>> FirstList, List<List<NodeState>> SecondList)
+        {
+            return false;
+
         }
 
         // Method to check if both nodes are within the same list
