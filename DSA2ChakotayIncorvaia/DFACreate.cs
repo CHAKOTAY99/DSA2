@@ -193,7 +193,7 @@ namespace DSA2ChakotayIncorvaia
             }
             Console.WriteLine("\nThe Depth of the Automaton is " + depth + ".");
         }
-
+        /*
         // Testing the newly understood Hopcroft algorithm
         public void MinimizeHopcroft(List<NodeState>MainList)
         {
@@ -252,17 +252,132 @@ namespace DSA2ChakotayIncorvaia
                         }
                         if(intersection.Any() && difference.Any())
                         {
-
+                            P.Remove(Y);
+                            P.Add(intersection);
+                            P.Add(difference);
+                            if (W.Contains(Y))
+                            {
+                                W.Remove(Y);
+                                W.Add(intersection);
+                                W.Add(difference);
+                            } else
+                            {
+                                if(intersection.Count <= difference.Count)
+                                {
+                                    W.Add(intersection);
+                                } else
+                                {
+                                    W.Add(difference);
+                                }
+                            }
                         }
                     }
                 }
             }
+            List<NodeState> finalList = new List<NodeState>();
         }
 
-        // Old Minimize Moore Algorithm - coudln't get trough actual partitioning without mixing up the lists
-        public void MinimizeMoore(List<List<NodeState>> MainList, bool Zeropass)
+        //2nd attempt
+        // Testing the newly understood Hopcroft algorithm
+        public void MinimizeHopcroftTwo(List<NodeState> MainList)
         {
-            List<List<NodeState>> NewList = new List<List<NodeState>>();
+            HashSet<NodeState> accepting = new HashSet<NodeState>();
+            HashSet<NodeState> rejecting = new HashSet<NodeState>();
+            // Seperate the accepting states and rejecting states
+            foreach (NodeState aState in MainList)
+            {
+                if (aState.StateType == 0)
+                {
+                    accepting.Add(aState);
+                }
+                else
+                {
+                    rejecting.Add(aState);
+                }
+            }
+            // P = {F, Q\F}
+            HashSet<HashSet<NodeState>> P = new HashSet<HashSet<NodeState>>();
+            P.Add(accepting);
+            P.Add(rejecting);
+            // W = {F}
+            HashSet<HashSet<NodeState>> W = new HashSet<HashSet<NodeState>>();
+            W.Add(accepting);
+            
+            // While W is not empty do
+            while (W.Any())
+            {
+                // for each c in Σ do
+                foreach (NodeState listStates in states)
+                {
+
+                    // choose and remove a set A from W
+                    foreach (HashSet<NodeState> tinyList in W)
+                    {
+                        W.Remove(tinyList);
+
+                        HashSet<NodeState> X = new HashSet<NodeState>();
+                        foreach (NodeState aState in states)
+                        {
+                            if (tinyList.Contains(aState.a) && tinyList.Contains(aState.b))
+                            {
+                                X.Add(aState);
+                            }
+                        }
+                        HashSet<HashSet<NodeState>> NewList = new HashSet<HashSet<NodeState>>(P);
+                        foreach (HashSet<NodeState> tinyP in NewList)
+                        {
+                            List<NodeState> Y = new List<NodeState>(tinyP);
+                            List<NodeState> intersection = new List<NodeState>(X);
+                            foreach (NodeState removal in intersection)
+                            {
+                                if (!Y.Contains(removal))
+                                {
+                                    intersection.Remove(removal);
+                                }
+                            }
+                            List<NodeState> difference = new List<NodeState>(Y);
+                            foreach (NodeState removal in difference)
+                            {
+                                if (X.Contains(removal))
+                                {
+                                    difference.Remove(removal);
+                                }
+                            }
+                            if (intersection.Any() && difference.Any())
+                            {
+                                P.Remove(Y);
+                                P.Add(intersection);
+                                P.Add(difference);
+                                if (W.Contains(Y))
+                                {
+                                    W.Remove(Y);
+                                    W.Add(intersection);
+                                    W.Add(difference);
+                                }
+                                else
+                                {
+                                    if (intersection.Count <= difference.Count)
+                                    {
+                                        W.Add(intersection);
+                                    }
+                                    else
+                                    {
+                                        W.Add(difference);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            List<NodeState> finalList = new List<NodeState>();
+        }
+        */
+
+        // Old Minimize Moore Algorithm - coudln't get trough actual partitioning without mixing up the lists
+        public void MinimizeMoore(List<List<NodeState>> OldEquivalency, bool Zeropass)
+        {
+            List<List<NodeState>> NewEquivalency = new List<List<NodeState>>();
             if(Zeropass == false) // Else check if it seperated its accepting and rejecting states
             {
                 Console.WriteLine("Make the 0 lvl lists");
@@ -278,67 +393,9 @@ namespace DSA2ChakotayIncorvaia
                         rejecting.Add(aState);
                     }
                 }
-                NewList.Add(new List<NodeState>(accepting));
-                NewList.Add(new List<NodeState>(rejecting));
-                /*// If not than seperate them into seperate lists
-                foreach (NodeState aState in states)
-                {
-                    foreach(List<NodeState> SubList in NewList)
-                    {
-                        if (!SubList.Any())
-                        {
-                            SubList.Add(aState);
-                        }
-                    }
-                    // Checks if the big list has a tiny list
-                    if (!NewList.Any())
-                    {
-                        // Create one and put the aState in it
-                        NewList.Add(new List<NodeState>(new NodeState[] { aState }));
-                    } else
-                    {
-                        foreach (List<NodeState> SubList in NewList)
-                        {
-
-                        }
-                    }
-                    // If it is of an accepting state
-                    if (aState.StateType == 0)
-                    {
-                        NewList.Add(new List<NodeState>(new NodeState[] { aState }));
-                        Console.WriteLine("Moo");
-                        // Each tiny list in the big list
-                        foreach(List<NodeState> SubList in NewList)
-                        {
-                            // Check if the tiny list contains data which are accepting states and put them in
-                            if(SubList.Contains(new NodeState { StateType = 0 }))
-                            {
-                                Console.WriteLine("Mohammed");
-                                SubList.Add(aState);
-                            } else
-                            {
-                                Console.WriteLine("Ahmed");
-                                NewList.Add(new List<NodeState>(new NodeState[] { aState }));
-                            }
-                        }
-                    } else
-                    {
-                        foreach (List<NodeState> SubList in NewList)
-                        {
-                            if (SubList.Contains(new NodeState { StateType = 1 }))
-                            {
-                                SubList.Add(aState);
-                            }
-                            else
-                            {
-                                NewList.Add(new List<NodeState>(new NodeState[] { aState }));
-                            }
-                        }
-                    }
-                }
-                */
-                /* THis is test data */
-                foreach (List<NodeState> SubList in NewList)
+                NewEquivalency.Add(new List<NodeState>(accepting));
+                NewEquivalency.Add(new List<NodeState>(rejecting));
+                foreach (List<NodeState> SubList in NewEquivalency)
                 {
                     Console.WriteLine("NEW FAT LIST");
                     foreach(NodeState aState in SubList)
@@ -346,54 +403,53 @@ namespace DSA2ChakotayIncorvaia
                         Console.WriteLine(aState);
                     }
                 }
-                MinimizeMoore(NewList, true);
+                MinimizeMoore(NewEquivalency, true);
             } else
             {
-                bool doFirst = false;
-                foreach (List<NodeState> SubList in MainList)
+                foreach (List<NodeState> OldSubList in OldEquivalency)
                 {
-                    var LastItem = SubList[SubList.Count - 1];
+                    if(OldSubList.Count == 1)
+                    {
+                        // You can stop right here
+                        break;
+                    }
+                    bool doFirst = false;
+                    NodeState LastItem = OldSubList[OldSubList.Count - 1];
+                    NodeState FirstItem = OldSubList[0];
                     if (doFirst == false)
                     {
-                        var FirstItem = SubList[0];
-                        if(CheckSubset(LastItem.a, FirstItem.a, MainList))
+                        if(CheckSubset(FirstItem, LastItem, OldEquivalency))
                         {
-                            if(CheckSubset(LastItem.b, FirstItem.b, MainList))
-                            {
-                                NewList.Add(new List<NodeState>(new NodeState[] { LastItem, FirstItem }));
-                            } else
-                            {
-                                NewList.Add(new List<NodeState>(new NodeState[] { LastItem }));
-                                NewList.Add(new List<NodeState>(new NodeState[] { FirstItem }));
-                            }
+                            NewEquivalency.Add(new List<NodeState>(new NodeState[] { LastItem, FirstItem }));
                         } else
                         {
-                            NewList.Add(new List<NodeState>(new NodeState[] { LastItem }));
-                            NewList.Add(new List<NodeState>(new NodeState[] { FirstItem }));
+                            NewEquivalency.Add(new List<NodeState>(new NodeState[] { FirstItem }));
+                            NewEquivalency.Add(new List<NodeState>(new NodeState[] { LastItem }));
                         }
-
                         // Started off the first sets
                         doFirst = true;
                     }
-                    //var LastItem = SubList[SubList.Count - 1];
-                    //var FirstItem = SubList[0];
-                    foreach(NodeState aState in SubList)
+                    foreach(NodeState aState in OldSubList)
                     {
-                        if(SubList = MainList[MainList.Count - 1])
+                        if(aState == LastItem || aState == FirstItem)
                         {
-                            NewList.Add(new List<NodeState>(new NodeState[] { aState }));
+                            // They were added
+                            break;
                         }
-                        if(CheckSubset(LastItem.a, aState.a, MainList))
+                        foreach(List<NodeState> NewSubList in NewEquivalency)
                         {
-                            if(CheckSubset(LastItem.b, aState.b, MainList))
-                            {
-                                SubList.Add(aState);
-                            } else
+                            // Check state type from first object in new list
+                            LastItem = NewSubList[NewSubList.Count - 1];
+                            FirstItem = NewSubList[0];
+                            if(aState.StateType != FirstItem.StateType)
                             {
                                 break;
                             }
-                            break;
+                            if(CheckSubset(aState, LastItem, OldEquivalency)){
+                                NewSubList.Add(aState);
+                            }
                         }
+                        NewEquivalency.Add(new List<NodeState>(new NodeState[] { aState }));
                     }
                 }
             }
@@ -401,13 +457,16 @@ namespace DSA2ChakotayIncorvaia
         }
 
         // Method to check if both nodes are within the same list
-        public bool CheckSubset(NodeState x, NodeState y, List<List<NodeState>> BigList)
+        public bool CheckSubset(NodeState x, NodeState y, List<List<NodeState>> OldList)
         {
-            foreach(List<NodeState>SubList in BigList)
+            foreach(List<NodeState>SubList in OldList)
             {
-                if(SubList.Contains(x) && SubList.Contains(y))
+                if(SubList.Contains(x.a) && SubList.Contains(y.a))
                 {
-                    return true;
+                    if(SubList.Contains(x.b) && SubList.Contains(y.b))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
