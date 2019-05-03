@@ -10,8 +10,7 @@ namespace DSA2ChakotayIncorvaia
         public int StateType { get; set; } /* 0 = accepting 1 = rejecting */
         public int StartState { get; set; } /* 0 = not start 1 = start */
         public NodeState a, b = null; /* Transitions */
-        public int GroupId { get; set; }
-
+        
         public override string ToString()
         {
             /* Marker if it is a start state or not */

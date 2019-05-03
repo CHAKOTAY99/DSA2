@@ -193,6 +193,73 @@ namespace DSA2ChakotayIncorvaia
             }
             Console.WriteLine("\nThe Depth of the Automaton is " + depth + ".");
         }
+
+        // Testing the newly understood Hopcroft algorithm
+        public void MinimizeHopcroft(List<NodeState>MainList)
+        {
+            List<NodeState> accepting = new List<NodeState>();
+            List<NodeState> rejecting = new List<NodeState>();
+            // Seperate the accepting states and rejecting states
+            foreach (NodeState aState in MainList)
+            {
+                if(aState.StateType == 0)
+                {
+                    accepting.Add(aState);
+                } else
+                {
+                    rejecting.Add(aState);
+                }
+            }
+            // P = {F, Q\F}
+            List<List<NodeState>> P = new List<List<NodeState>>();
+            P.Add(accepting);
+            P.Add(rejecting);
+            // W = {F}
+            List<List<NodeState>> W = new List<List<NodeState>>();
+            W.Add(accepting);
+
+            while (P.Any()) {
+                foreach(List<NodeState> tinyList in W)
+                {
+                    W.Remove(tinyList);
+                    List<NodeState> X = new List<NodeState>();
+                    foreach (NodeState aState in states)
+                    {
+                        if (tinyList.Contains(aState.a) && tinyList.Contains(aState.b))
+                        {
+                            X.Add(aState);
+                        }
+                    }
+                    List<List<NodeState>> NewList = new List<List<NodeState>>(P);
+                    foreach(List<NodeState> tinyP in NewList)
+                    {
+                        List<NodeState> Y = new List<NodeState>(tinyP);
+                        List<NodeState> intersection = new List<NodeState>(X);
+                        foreach(NodeState removal in intersection)
+                        {
+                            if (!Y.Contains(removal))
+                            {
+                                intersection.Remove(removal);
+                            }
+                        }
+                        List<NodeState> difference = new List<NodeState>(Y);
+                        foreach(NodeState removal in difference)
+                        {
+                            if (X.Contains(removal))
+                            {
+                                difference.Remove(removal);
+                            }
+                        }
+                        if(intersection.Any() && difference.Any())
+                        {
+
+                        }
+                    }
+                }
+            }
+        }
+
+        // Old Minimize Moore Algorithm - coudln't get trough actual partitioning without mixing up the lists
         public void MinimizeMoore(List<List<NodeState>> MainList, bool Zeropass)
         {
             List<List<NodeState>> NewList = new List<List<NodeState>>();
