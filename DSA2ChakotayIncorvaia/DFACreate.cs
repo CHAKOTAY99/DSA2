@@ -468,6 +468,7 @@ namespace DSA2ChakotayIncorvaia
                         }
                     }
                 }
+                CheckSize(kEquivalency, OldEquivalency);
                 if(kEquivalency.Equals(OldEquivalency))
                 {
                     Console.WriteLine("ITs the end");
@@ -488,6 +489,30 @@ namespace DSA2ChakotayIncorvaia
                 }
             }
         }
+        // Comparison checker
+        public bool CheckSize(List<List<NodeState>> firstMegaList, List<List<NodeState>> secondMegaList)
+        {
+            int i = 0, x = 0, y = 0, c = 0;
+            foreach(List<NodeState> SmallList in firstMegaList)
+            {
+                i++;
+                foreach(NodeState aState in SmallList)
+                {
+                    y++;
+                }
+            }
+            foreach(List<NodeState> OtherList in secondMegaList)
+            {
+                x++;
+                foreach (NodeState aState in OtherList)
+                {
+                    c++;
+                }
+            }
+            Console.WriteLine("i: {0}, x: {1}, y: {2}, c: {3}",i,x,y,c);
+            return false;
+        }
+
         /*
         public void MinimizeMooreHash(HashSet<HashSet<NodeState>> OldEquivalency, bool Zeropass)
         {
