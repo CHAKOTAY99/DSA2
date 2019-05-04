@@ -725,7 +725,6 @@ namespace DSA2ChakotayIncorvaia
             }
         }
         */
-        /*
         List<List<NodeState>> AllSSC = new List<List<NodeState>>();
         HashSet<NodeState> visited = new HashSet<NodeState>();
         List<int> lowLinks = new List<int>();
@@ -783,31 +782,6 @@ namespace DSA2ChakotayIncorvaia
                 }
             }
         }
-        */
-        public int min(int a, int b)
-        {
-            if(a > b)
-            {
-                return a;
-            } else
-            {
-                return b;
-            }
-        }
-        int lastIndex;
-        int[] index;
-        int[] lowlink;
-        Stack<int> idStack = new Stack<int>();
-        bool[] onStack;
-
-        public void LetsSee(List<NodeState> dfsa)
-        {
-            lastIndex = 0;
-            index = new int[dfsa.Count];
-            Array.Fill(index, -1);
-            lowlink = new int[dfsa.Count];
-            Array.Fill(lowlink, -1);
-
-        }
+        
     }
 }
