@@ -7,8 +7,11 @@ namespace DSA2ChakotayIncorvaia
 {
     class DFACreate
     {
-        // Create a list of States
-        //List<NodeState> states = new List<NodeState>();
+        // Just making the adjacency list publically available
+        List<NodeState> adjacencyListA = new List<NodeState>();
+        List<NodeState> adjacencyListM = new List<NodeState>();
+
+
 
         // Method to create DFA for question 1
         public List<NodeState> CreateAutomata()
@@ -62,10 +65,10 @@ namespace DSA2ChakotayIncorvaia
         }
 
         // Method to display DFA with an adjacency list
-        public void DisplayList(List<NodeState> states, string Automata)
+        public void DisplayListA(List<NodeState> states)
         {
-            Console.WriteLine(Automata);
             Console.WriteLine("\nPrinting the Adjancency List");
+            /*
             var item = states[states.Count - 1];
             Console.Write("V = {");
             foreach (NodeState aState in states)
@@ -101,6 +104,42 @@ namespace DSA2ChakotayIncorvaia
                 Console.WriteLine("{"+aState.IdNum + "} -->" + " ({" + aState.IdNum + "},a)="+ aState.a.IdNum + " --> " + " ({" + aState.IdNum + "},b)="+aState.b.IdNum + " --> null");
             }
             Console.Write("\n\n");
+            */
+
+            //Making it for Tarjan
+            foreach(NodeState aState in states)
+            {
+                adjacencyListA.Add(aState);
+                adjacencyListA.Add(aState.a);
+                adjacencyListA.Add(aState.b);
+                adjacencyListA.Add(null);
+            }
+
+            foreach(NodeState aState in adjacencyListA)
+            {
+                if(aState == null)
+                {
+                    Console.WriteLine("null\n");
+                } else
+                {
+                    Console.Write("{0} --> ", aState.IdNum);
+                }
+            }
+        }
+
+        public void DisplayListM(List<NodeState> states)
+        {
+            foreach (NodeState aState in adjacencyListA)
+            {
+                if (aState == null)
+                {
+                    Console.WriteLine("null\n");
+                }
+                else
+                {
+                    Console.Write("{0} --> ", aState.IdNum);
+                }
+            }
         }
 
         /* Method to enter strings into the automata
@@ -575,6 +614,15 @@ namespace DSA2ChakotayIncorvaia
                             counter++;
                         }
                     }
+
+                    //Making it for Tarjan
+                    foreach (NodeState aState in answer)
+                    {
+                        adjacencyListA.Add(aState);
+                        adjacencyListA.Add(aState.a);
+                        adjacencyListA.Add(aState.b);
+                        adjacencyListA.Add(null);
+                    }                    
                     return answer;
                 } else // they don't
                 {
@@ -625,6 +673,30 @@ namespace DSA2ChakotayIncorvaia
             }
             //Console.Write("Nay subsets don't match");
             return false;
+        }
+
+        List<List<NodeState>> AllSSC = new List<List<NodeState>>();
+        HashSet<NodeState> visited = new HashSet<NodeState>();
+        Stack<NodeState> OnStack = new Stack<NodeState>();
+        public void Tarjan(List<NodeState> states)
+        {
+            foreach (NodeState aState in states)
+            {
+                if (!visited.Contains(aState))
+                {
+                    getConnections(states, aState);
+                }
+            }
+        }
+        
+        public void getConnections(List<NodeState> states, NodeState aNode)
+        {
+            visited.Add(aNode);
+            OnStack.Push(aNode);
+            if(aNode.a.IdNum < aNode.b.IdNum)
+            {
+
+            }
         }
     }
 }
