@@ -8,11 +8,12 @@ namespace DSA2ChakotayIncorvaia
     class DFACreate
     {
         // Create a list of States
-        List<NodeState> states = new List<NodeState>();
+        //List<NodeState> states = new List<NodeState>();
 
         // Method to create DFA for question 1
-        public void CreateAutomata()
+        public List<NodeState> CreateAutomata()
         {
+            List<NodeState> states = new List<NodeState>();
             /* Variables */
             int randNum, startState;
             // Instantite random number generator
@@ -46,10 +47,11 @@ namespace DSA2ChakotayIncorvaia
                 aState.a = states[aNum];
                 aState.b = states[bNum];
             }
+            return states;
         }
 
         // Method to Display DFA
-        public void DisplayAutomata()
+        public void DisplayAutomata(List<NodeState> states)
         {
             Console.WriteLine("We randomly have {0} states in total.", states.Count);
             foreach (NodeState aState in states)
@@ -59,7 +61,7 @@ namespace DSA2ChakotayIncorvaia
         }
 
         // Method to display DFA with an adjacency list
-        public void DisplayList()
+        public void DisplayList(List<NodeState> states)
         {
             Console.WriteLine("\nPrinting the Adjancency List");
             var item = states[states.Count - 1];
@@ -101,7 +103,7 @@ namespace DSA2ChakotayIncorvaia
 
         /* Method to enter strings into the automata
          * and see if its rejected or accepted */
-         public void EnterString()
+         public void EnterString(List<NodeState> states)
         {
             Console.WriteLine("-----------------------------------------------------");
             Console.WriteLine("Enter a string (Alphabet = a,b): ");
@@ -143,7 +145,7 @@ namespace DSA2ChakotayIncorvaia
         /* Find the depth of the automata
          * Use breadth-first search to find the last and shortes possible state
          * then calculate on how to get to it by using nulls to calculate the level */
-        public void Bsearch()
+        public void Bsearch(List<NodeState> states)
         {
             int depth = 0;
             /* Find start state */
@@ -376,7 +378,7 @@ namespace DSA2ChakotayIncorvaia
         */
 
         // Old Minimize Moore Algorithm - coudln't get trough actual partitioning without mixing up the lists
-        public void MinimizeMoore(List<List<NodeState>> OldEquivalency, bool Zeropass)
+        public List<NodeState> MinimizeMoore(List<List<NodeState>> OldEquivalency, List<NodeState> states, bool Zeropass)
         {
             //Console.WriteLine("Method got called");
             List<List<NodeState>> kEquivalency = new List<List<NodeState>>();
@@ -408,7 +410,7 @@ namespace DSA2ChakotayIncorvaia
                         Console.WriteLine(aState);
                     }
                 }*/
-                MinimizeMoore(kEquivalency, true);
+                return MinimizeMoore(kEquivalency, states, true);
             } else
             {
                 // Check each list in the old big list
@@ -476,6 +478,7 @@ namespace DSA2ChakotayIncorvaia
                         }
                     }
                 }
+                // if they match
                 if(kEquivalency.Count == OldEquivalency.Count)
                 {
                     // For testing purposes
@@ -491,8 +494,63 @@ namespace DSA2ChakotayIncorvaia
                     }
                     Console.WriteLine("Returning now");
                     */
-                    return;
-                } else
+
+                    // Lets turn it into one big list
+                    List<NodeState> answer = new List<NodeState>();
+                    foreach(List<NodeState> smallerList in kEquivalency)
+                    {
+                        foreach(NodeState aState in smallerList)
+                        {
+                            answer.Add(aState);
+                        }
+                    }
+
+                    // Now lets see which lists contain more than one object
+                    int counter = 65;
+                    NodeState tempState = new NodeState();
+                    // Check every tiny list in kEquivalency
+                    foreach (List<NodeState> smallerList in kEquivalency)
+                    {
+                        // If it has more than one object in it then it must be compressed into one object
+                        if(smallerList.Count > 1)
+                        {
+                            // lets make the state to add
+                            tempState.IdNum = counter;
+                            foreach (NodeState aState in smallerList)
+                            {
+                                tempState.a = aState.a;
+                                tempState.b = aState.b;
+                                tempState.StateType = aState.StateType;
+                                if(aState.StartState == 1)
+                                {
+                                    tempState.StartState = aState.StartState;
+                                }
+                            }
+                            // add the tempstate
+                            answer.Add(tempState);
+                            // Now lets ensure that everything points to the tempstate instead of the originals
+                            foreach (NodeState aState in smallerList)
+                            {
+                                // loop thought he one list to point those who point to the orignials to point instead to the temp state
+                                foreach(NodeState toChange in answer)
+                                {
+                                    if(toChange.a == aState)
+                                    {
+                                        toChange.a = tempState;
+                                    }
+                                    if (toChange.b == aState)
+                                    {
+                                        toChange.b = tempState;
+                                    }
+                                }
+                                // Finally remove the original from the answer
+                                answer.Remove(aState);
+                            }
+                            counter++;
+                        }
+                    }
+                    return answer;
+                } else // they don't
                 {
                     // Printing for testing purposes
                     // Printing old
@@ -517,7 +575,7 @@ namespace DSA2ChakotayIncorvaia
                         }
                     }
                     */
-                    MinimizeMoore(kEquivalency, true);
+                    return MinimizeMoore(kEquivalency, states, true);
                 }
             }
         }

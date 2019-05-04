@@ -8,13 +8,14 @@ namespace DSA2ChakotayIncorvaia
         static void Main(string[] args)
         {
             DFACreate q1 = new DFACreate();
-            q1.CreateAutomata();
-            q1.DisplayAutomata();
+            List<NodeState> question1 = q1.CreateAutomata();
+            q1.DisplayAutomata(question1);
             //q1.EnterString();
-            q1.Bsearch();
-            q1.DisplayList();
+            q1.Bsearch(question1);
+            q1.DisplayList(question1);
             List<List<NodeState>> NewList = new List<List<NodeState>>();
-            q1.MinimizeMoore(NewList, false);
+            List<NodeState> question3 = q1.MinimizeMoore(NewList, question1, false);
+            q1.DisplayAutomata(question3);
             Console.ReadLine();
         }
     }
