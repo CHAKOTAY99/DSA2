@@ -67,7 +67,7 @@ namespace DSA2ChakotayIncorvaia
         // Method to display DFA with an adjacency list
         public void DisplayListA(List<NodeState> states)
         {
-            Console.WriteLine("\nPrinting the Adjancency List");
+            Console.WriteLine("\nPrinting the Adjancency List of Automata A");
             /*
             var item = states[states.Count - 1];
             Console.Write("V = {");
@@ -129,6 +129,7 @@ namespace DSA2ChakotayIncorvaia
 
         public void DisplayListM(List<NodeState> states)
         {
+            Console.WriteLine("\nPrinting the Adjancency List of Automata M");
             foreach (NodeState aState in adjacencyListA)
             {
                 if (aState == null)
