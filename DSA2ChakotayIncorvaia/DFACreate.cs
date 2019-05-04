@@ -105,42 +105,65 @@ namespace DSA2ChakotayIncorvaia
 
         /* Method to enter strings into the automata
          * and see if its rejected or accepted */
-         public void EnterString(List<NodeState> states)
+         public void EnterString(List<NodeState> states, string Automata)
         {
-            Console.WriteLine("-----------------------------------------------------");
-            Console.WriteLine("Enter a string (Alphabet = a,b): ");
-            String words = Console.ReadLine();
+            Console.Write(Automata);
+            Random rand = new Random();
             NodeState tempState = states.Find(e => e.StartState == 1);
             Console.WriteLine(tempState);
-            foreach (char c in words)
+            for (int i = 1; i <= 100; i++)
             {
-                if(c == ' ') {
-                    tempState = tempState;
-                } else if (c == 'a')
+                String words = "";
+                int randNum = rand.Next(0, 129);
+                for(int x = 0; x < randNum; x++)
                 {
-                    tempState = tempState.a;
-                    Console.WriteLine(tempState);
-                } else if (c == 'b')
-                {
-                    tempState = tempState.b;
-                    Console.WriteLine(tempState);
-                } else
-                {
-                    //return "Invalid String!";
-                    Console.WriteLine("Invalid String!");
-                    return;
+                    int randLetter = rand.Next(0, 3);
+                    if(randLetter == 0)
+                    {
+                        words = words + 'a';
+                    } else if (randLetter == 1)
+                    {
+                        words = words + 'b';
+                    } else
+                    {
+                        words = words + ' ';
+                    }
                 }
-            }
-            if(tempState.StateType == 0)
-            {
-                /* Accepted */
-                //return "String has been accepted";
-                Console.WriteLine("ACCEPTED STRING");
-            } else
-            {
-                /* Rejected */
-                //return "String has been rejected";
-                Console.WriteLine("REJECTED STRING");
+                foreach (char c in words)
+                {
+                    if (c == ' ')
+                    {
+                        // do nothing
+                    }
+                    else if (c == 'a')
+                    {
+                        tempState = tempState.a;
+                        //Console.WriteLine(tempState);
+                    }
+                    else if (c == 'b')
+                    {
+                        tempState = tempState.b;
+                        //Console.WriteLine(tempState);
+                    }
+                    else
+                    {
+                        //return "Invalid String!";
+                        Console.WriteLine("Invalid String!");
+                        return;
+                    }
+                }
+                if (tempState.StateType == 0)
+                {
+                    /* Accepted */
+                    //return "String has been accepted";
+                    Console.WriteLine("String " + i + " and size of "+ randNum +" of \"" + words + "\":: ACCEPTING STRING");
+                }
+                else
+                {
+                    /* Rejected */
+                    //return "String has been rejected";
+                    Console.WriteLine("String " + i + " and size of " + randNum + " of \"" +words+"\":: REJECTING STRING");
+                }
             }
         }
 

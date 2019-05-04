@@ -18,6 +18,8 @@ namespace DSA2ChakotayIncorvaia
             q1.DisplayAutomata(question3,"DISPLAYING AUTOMATA M");
             q1.DisplayList(question3, "DISPLAYING AUTOMATA M");
             q1.Bsearch(question3, "\nDISPLAYING AUTOMATA M");
+            q1.EnterString(question1,"\nDISPLAYING AUTOMATA A\n");
+            q1.EnterString(question3, "\nDISPLAYING AUTOMATA M\n");
             Console.ReadLine();
         }
     }
