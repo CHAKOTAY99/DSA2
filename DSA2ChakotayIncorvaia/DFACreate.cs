@@ -51,8 +51,9 @@ namespace DSA2ChakotayIncorvaia
         }
 
         // Method to Display DFA
-        public void DisplayAutomata(List<NodeState> states)
+        public void DisplayAutomata(List<NodeState> states, string Automata)
         {
+            Console.WriteLine(Automata);
             Console.WriteLine("We randomly have {0} states in total.", states.Count);
             foreach (NodeState aState in states)
             {
@@ -61,8 +62,9 @@ namespace DSA2ChakotayIncorvaia
         }
 
         // Method to display DFA with an adjacency list
-        public void DisplayList(List<NodeState> states)
+        public void DisplayList(List<NodeState> states, string Automata)
         {
+            Console.WriteLine(Automata);
             Console.WriteLine("\nPrinting the Adjancency List");
             var item = states[states.Count - 1];
             Console.Write("V = {");
@@ -98,7 +100,7 @@ namespace DSA2ChakotayIncorvaia
             {
                 Console.WriteLine("{"+aState.IdNum + "} -->" + " ({" + aState.IdNum + "},a)="+ aState.a.IdNum + " --> " + " ({" + aState.IdNum + "},b)="+aState.b.IdNum + " --> null");
             }
-            Console.Write("\n");
+            Console.Write("\n\n");
         }
 
         /* Method to enter strings into the automata
@@ -145,8 +147,9 @@ namespace DSA2ChakotayIncorvaia
         /* Find the depth of the automata
          * Use breadth-first search to find the last and shortes possible state
          * then calculate on how to get to it by using nulls to calculate the level */
-        public void Bsearch(List<NodeState> states)
+        public void Bsearch(List<NodeState> states, string Automaton)
         {
+            Console.WriteLine(Automaton);
             int depth = 0;
             /* Find start state */
             NodeState currentNode = states.Find(e => e.StartState == 1);
