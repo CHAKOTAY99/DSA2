@@ -377,11 +377,11 @@ namespace DSA2ChakotayIncorvaia
         // Old Minimize Moore Algorithm - coudln't get trough actual partitioning without mixing up the lists
         public void MinimizeMoore(List<List<NodeState>> OldEquivalency, bool Zeropass)
         {
-            Console.WriteLine("Method got called");
+            //Console.WriteLine("Method got called");
             List<List<NodeState>> kEquivalency = new List<List<NodeState>>();
             if(Zeropass == false) // Else check if it seperated its accepting and rejecting states
             {
-                Console.WriteLine("Make the 0 lvl lists");
+                //Console.WriteLine("Make the 0 Equivalency list");
                 List<NodeState> accepting = new List<NodeState>();
                 List<NodeState> rejecting = new List<NodeState>();
                 foreach(NodeState aState in states)
@@ -396,14 +396,16 @@ namespace DSA2ChakotayIncorvaia
                 }
                 kEquivalency.Add(new List<NodeState>(accepting));
                 kEquivalency.Add(new List<NodeState>(rejecting));
-                foreach (List<NodeState> SubList in kEquivalency)
+
+                //show me the accepting and rejecting states in seperate lists
+                /*foreach (List<NodeState> SubList in kEquivalency)
                 {
-                    Console.WriteLine("NEW FAT LIST");
+                    Console.WriteLine("0 Equivilancy LIST");
                     foreach(NodeState aState in SubList)
                     {
                         Console.WriteLine(aState);
                     }
-                }
+                }*/
                 MinimizeMoore(kEquivalency, true);
             } else
             {
@@ -413,31 +415,32 @@ namespace DSA2ChakotayIncorvaia
                     // is the set composed of only 1
                     if (OldSubList.Count == 1)
                     {
-                        // do nothing
+                        // make a new list with only that 1
+                        //Console.WriteLine("Old list only had 1, so make a new list with only 1");
+                        NodeState onlyState = OldSubList[0];
+                        kEquivalency.Add(new List<NodeState>(new NodeState[] { onlyState }));
                     }
                     else
                     {
                         // Compare the contents of the sets to each other
-                        bool doFirst = false;
-                        NodeState LastItem = OldSubList[OldSubList.Count - 1];
+                        //NodeState LastItem = OldSubList[OldSubList.Count - 1];
+                        NodeState LastItem = OldSubList[1];
                         NodeState FirstItem = OldSubList[0];
-                        if (doFirst == false)
+                        //Console.WriteLine("Lastitem {0}", LastItem);
+                        //Console.WriteLine("Lastitem {0}", FirstItem);
+                        if (CheckSubset(FirstItem, LastItem, OldEquivalency))
                         {
-                            if (CheckSubset(FirstItem, LastItem, OldEquivalency))
-                            {
-                                kEquivalency.Add(new List<NodeState>(new NodeState[] { LastItem, FirstItem }));
-                            }
-                            else
-                            {
-                                kEquivalency.Add(new List<NodeState>(new NodeState[] { FirstItem }));
-                                kEquivalency.Add(new List<NodeState>(new NodeState[] { LastItem }));
-                            }
-                            // Started off the first sets
-                            doFirst = true;
+                            kEquivalency.Add(new List<NodeState>(new NodeState[] { FirstItem, LastItem }));
+                        }
+                        else
+                        {
+                            kEquivalency.Add(new List<NodeState>(new NodeState[] { FirstItem }));
+                            kEquivalency.Add(new List<NodeState>(new NodeState[] { LastItem }));
                         }
                         // Each object in the old set
                         foreach (NodeState aState in OldSubList)
                         {
+                            bool AddedAState = false;
                             if (aState == LastItem || aState == FirstItem)
                             {
                                 // do nothing
@@ -448,8 +451,7 @@ namespace DSA2ChakotayIncorvaia
                                 {
                                     // Check state type from first object in new list
                                     NodeState newLastItem = NewSubList[NewSubList.Count - 1];
-                                    NodeState newFirstItem = NewSubList[0];
-                                    if (aState.StateType != newFirstItem.StateType)
+                                    if (aState.StateType != newLastItem.StateType)
                                     {
                                         // do nothing
                                     }
@@ -458,20 +460,24 @@ namespace DSA2ChakotayIncorvaia
                                         if (CheckSubset(aState, newLastItem, OldEquivalency))
                                         {
                                             NewSubList.Add(aState);
+                                            AddedAState = true;
+                                            break;
                                         }
                                     }
                                 }
-                                Console.WriteLine("Created a new list");
-                                Console.WriteLine(aState);
-                                kEquivalency.Add(new List<NodeState>(new NodeState[] { aState }));
+                                if (AddedAState == false)
+                                {
+                                    //Console.WriteLine("Created a new list {0}", aState);
+                                    kEquivalency.Add(new List<NodeState>(new NodeState[] { aState }));
+                                }
                             }
                         }
                     }
                 }
-                CheckSize(kEquivalency, OldEquivalency);
-                if(kEquivalency.Equals(OldEquivalency))
+                if(kEquivalency.Count == OldEquivalency.Count)
                 {
-                    Console.WriteLine("ITs the end");
+                    Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@Its the end@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                    Console.WriteLine(kEquivalency.Count);
                     foreach (List<NodeState> printList in kEquivalency)
                     {
                         Console.WriteLine("FINALLY A LIST");
@@ -484,7 +490,28 @@ namespace DSA2ChakotayIncorvaia
                     return;
                 } else
                 {
-                    Console.WriteLine("Redo it");
+
+                    // Printing old
+                    /*Console.WriteLine("DISPLAY OLD LIST =================================================================");
+                    foreach (List<NodeState> printList in OldEquivalency)
+                    {
+                        Console.WriteLine("DISPLAY OLD SUBLIST");
+                        foreach (NodeState printState in printList)
+                        {
+                            Console.WriteLine(printState);
+                        }
+                    }*/
+                    // printing new
+                    Console.WriteLine("DISPLAY NEW LIST ************************************************************************");
+                    Console.WriteLine(kEquivalency.Count);
+                    foreach (List<NodeState> printList in kEquivalency)
+                    {
+                        Console.WriteLine("DISPLAY NEW SUBLIST");
+                        foreach (NodeState printState in printList)
+                        {
+                            Console.WriteLine(printState);
+                        }
+                    }
                     MinimizeMoore(kEquivalency, true);
                 }
             }
@@ -658,12 +685,17 @@ namespace DSA2ChakotayIncorvaia
             {
                 if(SubList.Contains(x.a) && SubList.Contains(y.a))
                 {
-                    if(SubList.Contains(x.b) && SubList.Contains(y.b))
+                    foreach(List<NodeState> otherList in OldList)
                     {
-                        return true;
+                        if (otherList.Contains(x.b) && otherList.Contains(y.b))
+                        {
+                            //Console.WriteLine("Yay sets match");
+                            return true;
+                        }
                     }
                 }
             }
+            //Console.Write("Nay subsets don't match");
             return false;
         }
     }
