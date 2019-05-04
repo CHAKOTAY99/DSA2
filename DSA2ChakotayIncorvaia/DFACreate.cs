@@ -615,16 +615,18 @@ namespace DSA2ChakotayIncorvaia
                             counter++;
                         }
                     }
+                    // Sorting the list for future use
+                    List<NodeState> Sortedlist = answer.OrderBy(o => o.IdNum).ToList();
 
                     //Making it for Tarjan
-                    foreach (NodeState aState in answer)
+                    foreach (NodeState aState in Sortedlist)
                     {
                         adjacencyListA.Add(aState);
                         adjacencyListA.Add(aState.a);
                         adjacencyListA.Add(aState.b);
                         adjacencyListA.Add(null);
                     }                    
-                    return answer;
+                    return Sortedlist;
                 } else // they don't
                 {
                     // Printing for testing purposes
@@ -676,28 +678,136 @@ namespace DSA2ChakotayIncorvaia
             return false;
         }
 
-        List<List<NodeState>> AllSSC = new List<List<NodeState>>();
-        HashSet<NodeState> visited = new HashSet<NodeState>();
-        Stack<NodeState> OnStack = new Stack<NodeState>();
+        // for tarjan's algorithm
+        /*
+        int lastIndex;
+        int[] index;
+        int[] lowlink;
+        bool[] onStack;
         public void Tarjan(List<NodeState> states)
         {
-            foreach (NodeState aState in states)
+            lastIndex = 0;
+            index = new int[states.Count];
+            Array.Fill(index, -1);
+            lowlink = new int[states.Count];
+            Array.Fill(lowlink, -1);
+            onStack = new bool[states.Count];
+            for(int i=0; i < states.Count; i++)
+            {
+                if(index[i] == -1)
+                {
+                    getConnections()
+                }
+            }
+            foreach(NodeState aState in states)
             {
                 if (!visited.Contains(aState))
                 {
-                    getConnections(states, aState);
+                    getConnections(aState);
                 }
             }
         }
         
-        public void getConnections(List<NodeState> states, NodeState aNode)
+        public void getConnections(NodeState aNode)
         {
             visited.Add(aNode);
             OnStack.Push(aNode);
-            if(aNode.a.IdNum < aNode.b.IdNum)
+            aNode.lowLink = aNode.IdNum;
+            foreach(NodeState aState in adjacencyListM)
             {
-
+                if(aState == null)
+                {
+                    //do nothing
+                } else if (!visited.Contains(aState))
+                {
+                    getConnections(aNode);
+                }
             }
+        }
+        */
+        /*
+        List<List<NodeState>> AllSSC = new List<List<NodeState>>();
+        HashSet<NodeState> visited = new HashSet<NodeState>();
+        List<int> lowLinks = new List<int>();
+        Stack<NodeState> OnStack = new Stack<NodeState>();
+        int id = 0;
+        int lowestLink = 0;
+
+        public void tarjanAlgorithm(List<NodeState> states)
+        {
+            foreach(NodeState aState in states)
+            {
+                if (!visited.Contains(aState))
+                {
+                    dfs(aState);
+                }
+            }
+        }
+        public void dfs(NodeState state)
+        {
+            OnStack.Push(state);
+            visited.Add(state);
+            state.lowLink = lowestLink = id++;            
+            foreach(NodeState aState in adjacencyListM)
+            {
+                if(aState == null)
+                {
+                    //do nothing
+                } else
+                {
+                    if (!visited.Contains(aState))
+                    {
+                        dfs(aState);
+                    }
+                    if(OnStack.Contains(aState))
+                    {
+                        if (aState.lowLink > state.lowLink)
+                        {
+                            aState.lowLink = aState.lowLink;
+                        } else {
+                            aState.lowLink = state.lowLink;
+                        }
+                    }
+                }
+            }
+            if(state.IdNum == state.lowLink)
+            {
+                foreach(NodeState node in OnStack)
+                {
+                    OnStack.Pop();
+                    node.lowLink = state.lowLink;
+                    if(node == state)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        */
+        public int min(int a, int b)
+        {
+            if(a > b)
+            {
+                return a;
+            } else
+            {
+                return b;
+            }
+        }
+        int lastIndex;
+        int[] index;
+        int[] lowlink;
+        Stack<int> idStack = new Stack<int>();
+        bool[] onStack;
+
+        public void LetsSee(List<NodeState> dfsa)
+        {
+            lastIndex = 0;
+            index = new int[dfsa.Count];
+            Array.Fill(index, -1);
+            lowlink = new int[dfsa.Count];
+            Array.Fill(lowlink, -1);
+
         }
     }
 }
