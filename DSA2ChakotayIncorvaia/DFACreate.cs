@@ -12,7 +12,6 @@ namespace DSA2ChakotayIncorvaia
         List<NodeState> adjacencyListM = new List<NodeState>();
 
 
-
         // Method to create DFA for question 1
         public List<NodeState> CreateAutomata()
         {
@@ -733,6 +732,9 @@ namespace DSA2ChakotayIncorvaia
                     if (!visited.Contains(aState))
                     {
                         dfs(aState);
+                    } else
+                    {
+
                     }
                     if(OnStack.Contains(aState))
                     {
@@ -758,6 +760,5 @@ namespace DSA2ChakotayIncorvaia
                 }
             }
         }
-        
     }
 }
