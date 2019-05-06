@@ -22,10 +22,10 @@ namespace DSA2ChakotayIncorvaia
             // Instantite random number generator
             Random rand = new Random();
             // Generate the random number between 16 and 64 inclusive
-            randNum = rand.Next(15, 65);
+            randNum = rand.Next(3, 25);
             //Console.WriteLine("Random number is: {0}", randNum);
             /* Display the start state*/
-            startState = rand.Next(15, randNum);
+            startState = rand.Next(3, randNum);
             Console.WriteLine("Start state is: {0}", startState);
             /* Add basic stuff to create the entire list */
             for (int i = 1; i <= randNum; i++)
@@ -50,64 +50,9 @@ namespace DSA2ChakotayIncorvaia
                 aState.a = states[aNum];
                 aState.b = states[bNum];
             }
-            return states;
-        }
 
-        // Method to Display DFA
-        public void DisplayAutomata(List<NodeState> states, string Automata)
-        {
-            Console.WriteLine(Automata);
-            Console.WriteLine("We randomly have {0} states in total.", states.Count);
+            // creating its adjancency list
             foreach (NodeState aState in states)
-            {
-                Console.WriteLine(aState);
-            }
-        }
-
-        // Method to display DFA with an adjacency list
-        public void DisplayListA(List<NodeState> states)
-        {
-            Console.WriteLine("\nPrinting the Adjancency List of Automata A");
-            /*
-            var item = states[states.Count - 1];
-            Console.Write("V = {");
-            foreach (NodeState aState in states)
-            {
-
-                if (aState == item)
-                {
-                    Console.Write(aState.IdNum);
-                } else
-                {
-                    Console.Write(aState.IdNum + ",");
-                }
-            }
-            Console.Write("}\n");
-            Console.Write("E = {");
-            foreach (NodeState aState in states)
-            {
-
-                if (aState == item)
-                {
-                    Console.Write("({" + aState.IdNum + "},a)=" + aState.a.IdNum);
-                    Console.Write("({" + aState.IdNum + "},b)=" + aState.b.IdNum);
-                }
-                else
-                {
-                    Console.Write("({" + aState.IdNum + "},a)=" + aState.a.IdNum + ",");
-                    Console.Write("({" + aState.IdNum + "},b)=" + aState.b.IdNum + ",");
-                }
-            }
-            Console.Write("}\n");
-            foreach (NodeState aState in states)
-            {
-                Console.WriteLine("{"+aState.IdNum + "} -->" + " ({" + aState.IdNum + "},a)="+ aState.a.IdNum + " --> " + " ({" + aState.IdNum + "},b)="+aState.b.IdNum + " --> null");
-            }
-            Console.Write("\n\n");
-            */
-
-            //Making it for Tarjan
-            foreach(NodeState aState in states)
             {
                 adjacencyListA.Add(aState);
                 adjacencyListA.Add(aState.a);
@@ -115,6 +60,24 @@ namespace DSA2ChakotayIncorvaia
                 adjacencyListA.Add(null);
             }
 
+            return states;
+        }
+
+        // Method to Display DFA
+        public void DisplayAutomata(List<NodeState> states, string Automata)
+        {
+            Console.WriteLine(Automata);
+            Console.WriteLine("We have {0} states in total.", states.Count);
+            foreach (NodeState aState in states)
+            {
+                Console.WriteLine(aState);
+            }
+        }
+
+        // Method to display DFA with an adjacency list
+        public void DisplayListA()
+        {
+            Console.WriteLine("\nPrinting the Adjancency List of Automata A");            
             foreach(NodeState aState in adjacencyListA)
             {
                 if(aState == null)
@@ -127,10 +90,10 @@ namespace DSA2ChakotayIncorvaia
             }
         }
 
-        public void DisplayListM(List<NodeState> states)
+        public void DisplayListM()
         {
-            Console.WriteLine("\nPrinting the Adjancency List of Automata M");
-            foreach (NodeState aState in adjacencyListA)
+            Console.WriteLine("\nPrinting the Adjancency List of Automata M\n");
+            foreach (NodeState aState in adjacencyListM)
             {
                 if (aState == null)
                 {
@@ -443,7 +406,7 @@ namespace DSA2ChakotayIncorvaia
         }
         */
 
-        // Old Minimize Moore Algorithm - coudln't get trough actual partitioning without mixing up the lists
+        // Minimize Moore Algorithm
         public List<NodeState> MinimizeMoore(List<List<NodeState>> OldEquivalency, List<NodeState> states, bool Zeropass)
         {
             //Console.WriteLine("Method got called");
@@ -572,7 +535,8 @@ namespace DSA2ChakotayIncorvaia
                     }
 
                     // Now lets see which lists contain more than one object
-                    int counter = 65;
+                    //int counter = 65;
+                    int counter = states.Count + 1;
                     NodeState tempState = new NodeState();
                     // Check every tiny list in kEquivalency
                     foreach (List<NodeState> smallerList in kEquivalency)
@@ -587,7 +551,7 @@ namespace DSA2ChakotayIncorvaia
                                 tempState.a = aState.a;
                                 tempState.b = aState.b;
                                 tempState.StateType = aState.StateType;
-                                if(aState.StartState == 1)
+                                if (aState.StartState == 1)
                                 {
                                     tempState.StartState = aState.StartState;
                                 }
@@ -617,8 +581,15 @@ namespace DSA2ChakotayIncorvaia
                     }
                     // Sorting the list for future use
                     List<NodeState> Sortedlist = answer.OrderBy(o => o.IdNum).ToList();
+                    List<NodeState> FreshList = new List<NodeState>();
+                    // Renumbering of the list for proper indexing
+                    int reOrder = 1;
+                    foreach(NodeState aState in Sortedlist)
+                    {
+                        
+                    }
 
-                    //Making it for Tarjan
+                    // Making the adjancency list for Tarjan
                     foreach (NodeState aState in Sortedlist)
                     {
                         adjacencyListA.Add(aState);
@@ -741,12 +712,17 @@ namespace DSA2ChakotayIncorvaia
                     dfs(aState);
                 }
             }
+            foreach(int num in lowLinks)
+            {
+                Console.WriteLine("Moo");
+                Console.WriteLine(num);
+            }
         }
         public void dfs(NodeState state)
         {
             OnStack.Push(state);
             visited.Add(state);
-            state.lowLink = lowestLink = id++;            
+            state.lowLink = lowestLink;            
             foreach(NodeState aState in adjacencyListM)
             {
                 if(aState == null)
