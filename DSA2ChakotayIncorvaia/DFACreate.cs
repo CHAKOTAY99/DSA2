@@ -706,7 +706,23 @@ namespace DSA2ChakotayIncorvaia
         {
             foreach(NodeState aState in states)
             {
-                if (!visited.Contains(aState))
+                if (visited.Contains(aState))
+                {
+                    if (visited.Contains(aState.a))
+                    {
+                        if (visited.Contains(aState.b))
+                        {
+                            //do nothing
+                        }
+                        else
+                        {
+                            dfs(aState.b);
+                        }
+                    } else
+                    {
+                        dfs(aState.a);
+                    }
+                } else
                 {
                     dfs(aState);
                 }
