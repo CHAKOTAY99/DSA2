@@ -21,7 +21,7 @@ namespace DSA2ChakotayIncorvaia
             // Instantite random number generator
             Random rand = new Random();
             // Generate the random number between 16 and 64 inclusive
-            randNum = rand.Next(3, 25);
+            randNum = rand.Next(16, 65);
             //Console.WriteLine("Random number is: {0}", randNum);
             /* Display the start state*/
             startState = rand.Next(3, randNum);
