@@ -20,7 +20,7 @@ namespace DSA2ChakotayIncorvaia
             q1.DisplayListM();
             q1.EnterString(question1,"\nDISPLAYING AUTOMATA A\n");
             q1.EnterString(question3, "\nDISPLAYING AUTOMATA M\n");
-            q1.DisplayAutomata(question1, "ALLAHHHHHHHHHHHHHHHHHHHHHHH");
+            q1.tarjanAlgorithm(question3);
             Console.ReadLine();
         }
     }

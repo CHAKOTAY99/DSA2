@@ -591,10 +591,10 @@ namespace DSA2ChakotayIncorvaia
                     // Making the adjancency list for Tarjan
                     foreach (NodeState aState in Sortedlist)
                     {
-                        adjacencyListA.Add(aState);
-                        adjacencyListA.Add(aState.a);
-                        adjacencyListA.Add(aState.b);
-                        adjacencyListA.Add(null);
+                        adjacencyListM.Add(aState);
+                        adjacencyListM.Add(aState.a);
+                        adjacencyListM.Add(aState.b);
+                        adjacencyListM.Add(null);
                     }                    
                     return Sortedlist;
                 } else // they don't
@@ -706,60 +706,44 @@ namespace DSA2ChakotayIncorvaia
         {
             foreach(NodeState aState in states)
             {
-                if (visited.Contains(aState))
+                if (!visited.Contains(aState))
                 {
-                    if (visited.Contains(aState.a))
-                    {
-                        if (visited.Contains(aState.b))
-                        {
-                            //do nothing
-                        }
-                        else
-                        {
-                            dfs(aState.b);
-                        }
-                    } else
-                    {
-                        dfs(aState.a);
-                    }
-                } else
+                    dfs(aState, states);
+                } else if (!visited.Contains(aState.a))
                 {
-                    dfs(aState);
+                    dfs(aState.a, states);
+                } else if(!visited.Contains(aState.b))
+                {
+                    dfs(aState.b, states);
                 }
             }
-            foreach(int num in lowLinks)
-            {
-                Console.WriteLine("Moo");
-                Console.WriteLine(num);
-            }
         }
-        public void dfs(NodeState state)
+        public void dfs(NodeState state, List<NodeState> List)
         {
             OnStack.Push(state);
             visited.Add(state);
             state.lowLink = lowestLink;            
-            foreach(NodeState aState in adjacencyListM)
+            foreach(NodeState aState in List)
             {
-                if(aState == null)
+                if (!visited.Contains(aState))
                 {
-                    //do nothing
-                } else
+                    dfs(aState, List);
+                }
+                else if (!visited.Contains(aState.a))
                 {
-                    if (!visited.Contains(aState))
+                    dfs(aState.a, List);
+                }
+                else if (!visited.Contains(aState.b))
+                {
+                    dfs(aState.b, List);
+                }
+                if (OnStack.Contains(aState))
+                {
+                    if (aState.lowLink > state.lowLink)
                     {
-                        dfs(aState);
-                    } else
-                    {
-
-                    }
-                    if(OnStack.Contains(aState))
-                    {
-                        if (aState.lowLink > state.lowLink)
-                        {
-                            aState.lowLink = aState.lowLink;
-                        } else {
-                            aState.lowLink = state.lowLink;
-                        }
+                        aState.lowLink = aState.lowLink;
+                    } else {
+                        aState.lowLink = state.lowLink;
                     }
                 }
             }
