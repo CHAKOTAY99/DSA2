@@ -89,6 +89,7 @@ namespace DSA2ChakotayIncorvaia
             }
         }
 
+        // Method to display DFA with an adjacency list
         public void DisplayListM()
         {
             Console.WriteLine("\nPrinting the Adjancency List of Automata M\n");

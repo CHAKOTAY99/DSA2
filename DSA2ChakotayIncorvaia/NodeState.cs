@@ -53,6 +53,7 @@ namespace DSA2ChakotayIncorvaia
             }
         }
 
+        // Checks if they have the same ID
         public bool Equals(NodeState other)
         {
             if (other == null)
